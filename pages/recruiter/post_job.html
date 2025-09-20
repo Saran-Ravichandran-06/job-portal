@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post Job</title>
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/navbar.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+  <script src="../../js/navbar.js" defer></script>
+  <style>
+    .alert {
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      font-size: 16px;
+      display: none;
+    }
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .alert-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Job Form Layout */
+    .job-form {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      width: 30%;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+      width: 70%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .job-form .btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .job-form .btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Responsive Fix */
+    @media (max-width: 600px) {
+      .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .form-group label {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="recruiter-page">
+  <!-- Navbar -->
+  <div id="navbar" data-role="recruiter"></div>
+
+  <!-- Content -->
+  <div class="content" style="text-align: center;">
+    <h1>Post a Job</h1>
+    <br>
+    <!-- Success or Error Message -->
+    <div id="message" class="alert"></div>
+
+    <form action="../../php/post_job.php" method="POST" class="job-form">
+      <div class="form-group">
+        <label for="title">Job Title:</label>
+        <input type="text" id="title" name="title" required />
+      </div>
+
+      <div class="form-group">
+        <label for="company_name">Company Name:</label>
+        <input type="text" id="company_name" name="company_name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Job Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required />
+      </div>
+
+      <button type="submit" class="btn">Post Job</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Job Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Show success or error message
+    const params = new URLSearchParams(window.location.search);
+    const messageDiv = document.getElementById('message');
+
+    if (params.has('success')) {
+      messageDiv.textContent = "✅ Job posted successfully!";
+      messageDiv.classList.add('alert', 'alert-success');
+      messageDiv.style.display = 'block';
+    }
+
+    if (params.has('error')) {
+      messageDiv.textContent = "❌ Failed to post the job. Please try again.";
+      messageDiv.classList.add('alert', 'alert-error');
+      messageDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

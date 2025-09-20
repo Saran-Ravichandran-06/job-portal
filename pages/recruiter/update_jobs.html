@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Job</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <link rel="stylesheet" href="../../css/responsive.css">
+  <script src="../../js/navbar.js" defer></script>
+</head>
+<body class="recruiter-page">
+  <div id="navbar" data-role="recruiter"></div>
+
+  <div class="content">
+    <h1>Update Job</h1>
+    <form id="updateJobForm">
+      <input type="hidden" id="jobId">
+      <label for="title">Job Title:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="company_name">Company Name:</label>
+      <input type="text" id="company_name" name="company_name" required>
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" required>
+
+      <button type="submit" class="btn">Update Job</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Job Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const jobId = new URLSearchParams(window.location.search).get('id');
+
+    async function fetchJobDetails() {
+      try {
+        const response = await fetch(`../../php/get_job.php?id=${jobId}`);
+        const job = await response.json();
+
+        document.getElementById('jobId').value = job.id;
+        document.getElementById('title').value = job.title;
+        document.getElementById('company_name').value = job.company_name;
+        document.getElementById('description').value = job.description;
+        document.getElementById('location').value = job.location;
+      } catch (error) {
+        alert('Failed to load job details.');
+      }
+    }
+
+    document.getElementById('updateJobForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        id: document.getElementById('jobId').value,
+        title: document.getElementById('title').value,
+        company_name: document.getElementById('company_name').value,
+        description: document.getElementById('description').value,
+        location: document.getElementById('location').value
+      };
+
+      const response = await fetch('../../php/update_job.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert('Job updated successfully!');
+        window.location.href = 'manage_jobs.html';
+      } else {
+        alert('Update failed: ' + result.message);
+      }
+    });
+
+    fetchJobDetails();
+  </script>
+</body>
+</html>

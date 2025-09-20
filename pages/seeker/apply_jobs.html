@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Apply for Jobs</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <script src="../../js/navbar.js" defer></script>
+  <style>
+    .jobs-table-container table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .jobs-table-container th,
+    .jobs-table-container td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .jobs-table-container th {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .jobs-table-container tr:nth-child(even) {
+      background: #f2f2f2;
+    }
+
+    .apply-btn {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .apply-btn:hover {
+      background: #218838;
+    }
+
+    .apply-btn[disabled] {
+      background: gray;
+      cursor: not-allowed;
+    }
+
+    .resume-upload {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body class="seeker-page">
+  <div id="navbar" data-role="seeker"></div>
+
+  <div class="content">
+    <h1 style="text-align:center;">Search and Apply for Jobs</h1>
+    <br>
+
+    <!-- Search Form -->
+    <form id="jobSearchForm" onsubmit="searchJobs(event)">
+      <div class="search-container">
+        <label for="jobRole">Job Role:</label><br><br>
+        <input type="text" id="jobRole" name="jobRole" placeholder="Enter Job Role (e.g., AI Engineer)" style="width:50%;" required>
+        <br><br>
+        <button type="submit" class="btn">Search</button>
+      </div>
+    </form>
+
+    <!-- Results Table -->
+    <div id="jobsContainer" class="jobs-table-container"></div>
+  </div>
+  <footer>
+    <p>&copy; 2025 Job Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function searchJobs(event) {
+      event.preventDefault();
+      const jobRole = document.getElementById('jobRole').value;
+
+      fetch(`../../php/fetch_jobs.php?jobRole=${encodeURIComponent(jobRole)}`)
+        .then(response => response.json())
+        .then(jobs => {
+          const container = document.getElementById('jobsContainer');
+          container.innerHTML = '';
+
+          if (jobs.length === 0) {
+            container.innerHTML = "<p>No jobs found for the entered role.</p>";
+            return;
+          }
+
+          let tableHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Job Title</th>
+                  <th>Company Name</th>
+                  <th>Location</th>
+                  <th>Description</th>
+                  <th>Posted On</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+
+          jobs.forEach(job => {
+            const action = job.applied > 0
+              ? `<button class="apply-btn" disabled>Applied</button>`
+              : `
+                <form onsubmit="applyJob(event, ${job.id})" enctype="multipart/form-data">
+                  <input type="file" name="resume" accept="application/pdf" class="resume-upload" required>
+                  <button type="submit" class="apply-btn">Apply</button>
+                </form>
+              `;
+
+            tableHTML += `
+              <tr>
+                <td>${job.title}</td>
+                <td>${job.company_name}</td>
+                <td>${job.location}</td>
+                <td>${job.description}</td>
+                <td>${job.created_at}</td>
+                <td>${action}</td>
+              </tr>
+            `;
+          });
+
+          tableHTML += `</tbody></table>`;
+          container.innerHTML = tableHTML;
+        })
+        .catch(err => {
+          console.error('Error fetching jobs:', err);
+        });
+    }
+
+    function applyJob(event, jobId) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      formData.append('job_id', jobId);
+
+      fetch('../../php/apply_job.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert(result);
+        document.getElementById('jobSearchForm').dispatchEvent(new Event('submit')); // Refresh jobs
+      })
+      .catch(err => {
+        console.error('Error applying:', err);
+      });
+    }
+  </script>
+</body>
+</html>

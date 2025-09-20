@@ -1,0 +1,25 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore XAMPP specific configs
+htdocs/tmp/
+htdocs/logs/
+*.log
+
+# Ignore environment/config files
+php/config.php
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+
+# Ignore OS files
+*.bak
+*.swp
+*.swo
+
+# Ignore cache
+/cache/
+/*.cache
+

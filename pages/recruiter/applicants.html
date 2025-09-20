@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Applicants</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/navbar.css">
+<link rel="stylesheet" href="../../css/responsive.css">
+<script src="../../js/navbar.js" defer></script>
+<style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      color: white;
+      background-color:#007BFF ;
+    }
+    .resume-link {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .resume-link:hover {
+      text-decoration: underline;
+    }
+</style>
+</head>
+<body class="recruiter-page">
+<div id="navbar" data-role="recruiter"></div>
+<div class="content">
+    <div class="table-container">
+        <h1 style="text-align:center;">Job Applicants</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Applicant Name</th>
+                    <th>Email</th>
+                    <th>Job Title</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="applicantsTable">
+                <tr><td colspan="5">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Job Portal | All Rights Reserved
+</footer>
+
+<script>
+// ✅ Load applicants when page loads
+document.addEventListener('DOMContentLoaded', loadApplicants);
+
+function loadApplicants() {
+    fetch('../../php/applicants.php')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('applicantsTable');
+            tableBody.innerHTML = '';
+
+            if (data.error) {
+                tableBody.innerHTML = `<tr><td colspan="5">${data.error}</td></tr>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5">No applicants found</td></tr>';
+                return;
+            }
+
+            data.forEach(applicant => {
+                const resumeLink = applicant.resume_path 
+                    ? `<a href="../../${applicant.resume_path}" target="_blank" class="resume-link">View Resume</a>` 
+                    : 'No Resume';
+
+                const row = `
+                    <tr>
+                        <td>${applicant.applicant_name}</td>
+                        <td>${applicant.email}</td>
+                        <td>${applicant.job_title}</td>
+                        <td>${resumeLink}</td>
+                        <td>
+                            <select onchange="updateStatus(${applicant.application_id}, this.value)">
+                                <option value="Pending" ${applicant.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Accepted" ${applicant.status === 'Accepted' ? 'selected' : ''}>Accepted</option>
+                                <option value="Rejected" ${applicant.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading applicants:', error);
+            document.getElementById('applicantsTable').innerHTML = '<tr><td colspan="5">Error loading applicants</td></tr>';
+        });
+}
+
+// ✅ Update status via AJAX
+function updateStatus(applicationId, status) {
+    fetch('../../php/update_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ application_id: applicationId, status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message); // ✅ Popup success message
+        } else {
+            alert(data.error || "Error updating status");
+        }
+    })
+    .catch(error => console.error('Error updating status:', error));
+}
+</script>
+
+</body>
+</html>

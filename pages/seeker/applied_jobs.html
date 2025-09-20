@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Applied Jobs</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/navbar.css">
+<script src="../../js/navbar.js" defer></script>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: rgba(255, 255, 255, 0.9); /* ✅ background box for readability */
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        color: white;
+        background-color: #007bff;
+    }
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        color: white;
+    }
+    .status-pending { background-color: orange; }
+    .status-accepted { background-color: green; }
+    .status-rejected { background-color: red; }
+    .cancel-btn {
+        background-color: #ff4d4d;
+        color: white;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .cancel-btn:hover {
+        background-color: #d93636;
+    }
+</style>
+</head>
+<body class="seeker-page">
+<div id="navbar" data-role="seeker"></div>
+
+<main class="content">
+  <h1 style="text-align:center;">Your Applied Jobs</h1>
+  <div id="appliedJobsContainer" class="table-container">
+    <p>Loading applied jobs...</p>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Job Portal. All rights reserved.</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', loadAppliedJobs);
+
+function loadAppliedJobs() {
+  fetch('../../php/applied_jobs.php')
+    .then(response => response.json())
+    .then(jobs => {
+      const container = document.getElementById('appliedJobsContainer');
+      container.innerHTML = '';
+
+      if (!jobs || jobs.length === 0) {
+        container.innerHTML = "<p>You have not applied to any jobs yet.</p>";
+        return;
+      }
+
+      // Create Table
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Applied On</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="jobsTableBody"></tbody>
+      `;
+      container.appendChild(table);
+      const tbody = document.getElementById('jobsTableBody');
+
+      jobs.forEach(job => {
+        const statusClass = job.status === 'accepted' ? 'status-accepted'
+                         : job.status === 'rejected' ? 'status-rejected'
+                         : 'status-pending';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${escapeHTML(job.job_title)}</td>
+          <td>${escapeHTML(job.company_name)}</td>
+          <td>${escapeHTML(job.location)}</td>
+          <td>${escapeHTML(job.description)}</td>
+          <td><span class="status-badge ${statusClass}">${escapeHTML(job.status)}</span></td>
+          <td>${new Date(job.applied_at).toLocaleDateString()}</td>
+          <td>
+            <button class="cancel-btn" onclick="cancelApplication(${job.application_id})">
+              Cancel
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching applied jobs:', err);
+      document.getElementById('appliedJobsContainer').innerHTML = "<p>Error loading applied jobs.</p>";
+    });
+}
+
+function cancelApplication(applicationId) {
+  if (!confirm('Are you sure you want to cancel this application?')) return;
+
+  fetch('../../php/cancel_application.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `application_id=${encodeURIComponent(applicationId)}`
+  })
+  .then(response => response.text())
+  .then(result => {
+    alert(result); // ✅ Show PHP response message
+    loadAppliedJobs(); // ✅ Refresh the table after cancellation
+  })
+  .catch(err => {
+    console.error('Error canceling application:', err);
+    alert('❌ Something went wrong while canceling.');
+  });
+}
+
+// Prevent XSS
+function escapeHTML(str) {
+  return str.replace(/[&<>"']/g, match => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[match]));
+}
+</script>
+</body>
+</html>

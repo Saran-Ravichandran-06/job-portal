@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Portal - Register</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="common">
+  <div class="register-container">
+    <h2>Create an Account</h2>
+
+    <form action="php/register.php" method="POST">
+      <label for="role">Register as:</label>
+      <select name="role" id="role" required>
+        <option value="">Select Role</option>
+        <option value="seeker">Job Seeker</option>
+        <option value="recruiter">Job Recruiter</option>
+      </select>
+
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" placeholder="Enter your username" required>
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" placeholder="Enter your email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" placeholder="Enter your password" required>
+
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password" required>
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login Here</a></p>
+  </div>
+</body>
+</html>

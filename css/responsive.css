@@ -1,0 +1,59 @@
+/* ========== RESPONSIVENESS UTILITIES ========== */
+
+/* Tablets (max 992px) */
+@media (max-width: 992px) {
+  .navbar ul {
+    gap: 1rem;
+  }
+
+  .container,
+  .login-container,
+  .register-container {
+    max-width: 380px;
+  }
+}
+
+/* Mobiles (max 768px) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 0.8rem 1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    color: #fff;
+  }
+
+  .navbar ul {
+    flex-direction: column;
+    width: 100%;
+    background: #2b4c7e;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .navbar ul.active {
+    display: flex;
+  }
+
+  .navbar ul li {
+    padding: 0.7rem 0;
+    text-align: center;
+  }
+}
+
+/* Small Mobiles (max 500px) */
+@media (max-width: 500px) {
+  .container,
+  .login-container,
+  .register-container {
+    padding: 1rem;
+    width: 90%;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}

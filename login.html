@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Portal - Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="common">
+  <div class="login-container">
+    <h2>Login to Job Portal</h2>
+
+    <form action="php/login.php" method="POST">
+      <label for="role">Login as:</label>
+      <select name="role" id="role" required>
+        <option value="">Select Role</option>
+        <option value="seeker">Job Seeker</option>
+        <option value="recruiter">Job Recruiter</option>
+      </select>
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" placeholder="Enter your email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" placeholder="Enter your password" required>
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.html">Register Here</a></p>
+  </div>
+</body>
+</html>
