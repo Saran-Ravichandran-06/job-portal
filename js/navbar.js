@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Dashboard", url: "../seeker/dashboard.html" },
       { name: "Apply Job", url: "../seeker/apply_jobs.html" },
       { name: "Applied Jobs", url: "../seeker/applied_jobs.html" },
-      { name: "Service & Contact", url: "../seeker/service_contact.html" },
+      { name: "Contact", url: "../seeker/service_contact.html" },
       { name: "Logout", url: "../../php/logout.php" }
     ];
   } else if (role === "recruiter") {
@@ -20,40 +20,21 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Post Job", url: "../recruiter/post_job.html" },
       { name: "Manage Jobs", url: "../recruiter/manage_jobs.html" },
       { name: "Applicants", url: "../recruiter/applicants.html" },
-      { name: "Service & Contact", url: "../recruiter/service_contact.html" },
+      { name: "Contact", url: "../recruiter/service_contact.html" },
       { name: "Logout", url: "../../php/logout.php" }
     ];
   }
 
+  document.body.classList.add("has-sidebar");
+
   navbar.innerHTML = `
-    <!-- Toggle Button for Sidebar -->
-    <div class="sidebar-toggle" id="sidebarToggle">
-      &#9776;
-    </div>
-    
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="navbar-brand">Job Portal</div>
-        <div class="close-btn" id="sidebarClose">&times;</div>
       </div>
       <ul class="sidebar-links">
         ${links.map(link => `<li><a href="${link.url}">${link.name}</a></li>`).join("")}
       </ul>
     </nav>
   `;
-
-  // Add event listeners for toggle
-  const toggleBtn = document.getElementById("sidebarToggle");
-  const closeBtn = document.getElementById("sidebarClose");
-  const sidebar = document.getElementById("sidebar");
-
-  if (toggleBtn && closeBtn && sidebar) {
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.add("open");
-    });
-
-    closeBtn.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-    });
-  }
 });

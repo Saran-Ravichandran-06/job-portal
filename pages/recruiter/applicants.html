@@ -8,34 +8,37 @@
 <link rel="stylesheet" href="../../css/responsive.css">
 <script src="../../js/navbar.js" defer></script>
 <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      color: white;
-      background-color:#007BFF ;
-    }
     .resume-link {
-      color: #007BFF;
+      color: var(--theme-color, #2b4c7e);
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      transition: color 0.3s ease;
     }
     .resume-link:hover {
+      color: var(--theme-hover, #1e355a);
       text-decoration: underline;
+    }
+    .jobs-table-container select {
+      padding: 6px 10px;
+      border: 1px solid #d0d7e2;
+      border-radius: 6px;
+      background: #fff;
+      font-weight: 500;
+      color: #333;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .jobs-table-container select:focus {
+      border-color: var(--theme-color, #2b4c7e);
+      box-shadow: 0 0 5px rgba(43, 76, 126, 0.2);
     }
 </style>
 </head>
 <body class="recruiter-page">
 <div id="navbar" data-role="recruiter"></div>
 <div class="content">
-    <div class="table-container">
+    <div class="jobs-table-container">
         <h1 style="text-align:center;">Job Applicants</h1>
         <table>
             <thead>
