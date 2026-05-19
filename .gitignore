@@ -23,7 +23,6 @@ php/config.php
 /cache/
 /*.cache
 
-#Ignore uploads
+# Ignore user uploads
 uploads/
-*.pdf
 
