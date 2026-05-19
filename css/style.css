@@ -10,23 +10,24 @@
 body {
     background: #f4f7fb;
     color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        "sidebar content"
+        "sidebar footer";
     min-height: 100vh;
     margin: 0;
-    position: relative;
 }
 
 /* Page Backgrounds */
 body.seeker-page {
-    background: url("../assets/images/dbs.avif") no-repeat center center fixed;
+    background: url("../assets/images/dbs.avif") no-repeat center right fixed;
     background-size: cover;
 }
 
 body.recruiter-page {
-    background: url("../assets/images/dbr.avif") no-repeat center center fixed;
+    background: url("../assets/images/dbr.avif") no-repeat center right fixed;
     background-size: cover;
 }
 
@@ -37,18 +38,24 @@ body.common {
 
 /* Navbar & Content */
 #navbar {
-    width: 100%;
+    grid-area: sidebar;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .content {
-    flex: 1;
+    grid-area: content;
     padding: 40px;
-    max-width: none;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     /* ✅ Background box for better readability */
     background: rgba(255, 255, 255, 0.75);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* ✅ Optional text shadow for clarity */
@@ -58,11 +65,11 @@ h1, h2, h3, p, li, label, td, th {
 
 /* Footer */
 footer {
+    grid-area: footer;
     width: 100%;
     text-align: center;
     padding: 15px;
     background: #f4f4f4;
-    margin-top: auto;
 }
 
 /* ==================== CONTAINERS ==================== */

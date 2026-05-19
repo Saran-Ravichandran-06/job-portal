@@ -26,34 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   navbar.innerHTML = `
-    <!-- Toggle Button for Sidebar -->
-    <div class="sidebar-toggle" id="sidebarToggle">
-      &#9776;
-    </div>
-    
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="navbar-brand">Job Portal</div>
-        <div class="close-btn" id="sidebarClose">&times;</div>
       </div>
       <ul class="sidebar-links">
         ${links.map(link => `<li><a href="${link.url}">${link.name}</a></li>`).join("")}
       </ul>
     </nav>
   `;
-
-  // Add event listeners for toggle
-  const toggleBtn = document.getElementById("sidebarToggle");
-  const closeBtn = document.getElementById("sidebarClose");
-  const sidebar = document.getElementById("sidebar");
-
-  if (toggleBtn && closeBtn && sidebar) {
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.add("open");
-    });
-
-    closeBtn.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-    });
-  }
 });
