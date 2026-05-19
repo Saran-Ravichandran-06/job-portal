@@ -25,3 +25,5 @@ php/config.php
 
 #Ignore uploads
 uploads/
+*.pdf
+
