@@ -3,7 +3,8 @@ session_start();
 include 'config.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'seeker') {
-    die(json_encode([]));
+    http_response_code(401);
+    die(json_encode(["error" => "Unauthorized - Please log in as a seeker."]));
 }
 
 $seeker_id = $_SESSION['user_id'];

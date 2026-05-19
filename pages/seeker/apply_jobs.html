@@ -7,48 +7,6 @@
   <link rel="stylesheet" href="../../css/navbar.css">
   <script src="../../js/navbar.js" defer></script>
   <style>
-    .jobs-table-container table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    .jobs-table-container th,
-    .jobs-table-container td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-
-    .jobs-table-container th {
-      background: #007bff;
-      color: #fff;
-    }
-
-    .jobs-table-container tr:nth-child(even) {
-      background: #f2f2f2;
-    }
-
-    .apply-btn {
-      background: #28a745;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .apply-btn:hover {
-      background: #218838;
-    }
-
-    .apply-btn[disabled] {
-      background: gray;
-      cursor: not-allowed;
-    }
-
     .resume-upload {
       margin-top: 10px;
     }
@@ -59,17 +17,19 @@
 
   <div class="content">
     <h1 style="text-align:center;">Search and Apply for Jobs</h1>
-    <br>
-
-    <!-- Search Form -->
-    <form id="jobSearchForm" onsubmit="searchJobs(event)">
-      <div class="search-container">
-        <label for="jobRole">Job Role:</label><br><br>
-        <input type="text" id="jobRole" name="jobRole" placeholder="Enter Job Role (e.g., AI Engineer)" style="width:50%;" required>
-        <br><br>
-        <button type="submit" class="btn">Search</button>
-      </div>
-    </form>
+    
+    <!-- Search Form Card -->
+    <div class="form-card" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+      <form id="jobSearchForm" onsubmit="searchJobs(event)">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="jobRole">Search by Job Role:</label>
+          <div style="display: flex; gap: 1rem; align-items: center; width: 100%;">
+            <input type="text" id="jobRole" name="jobRole" placeholder="e.g. AI Engineer, Full-Stack Developer, Product Manager" style="flex: 1; margin: 0;">
+            <button type="submit" class="btn" style="padding: 0.8rem 2rem; margin: 0; white-space: nowrap;">Search Jobs</button>
+          </div>
+        </div>
+      </form>
+    </div>
 
     <!-- Results Table -->
     <div id="jobsContainer" class="jobs-table-container"></div>
@@ -79,18 +39,27 @@
   </footer>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      searchJobs();
+    });
+
     function searchJobs(event) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       const jobRole = document.getElementById('jobRole').value;
 
       fetch(`../../php/fetch_jobs.php?jobRole=${encodeURIComponent(jobRole)}`)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || 'Server error'); });
+          }
+          return response.json();
+        })
         .then(jobs => {
           const container = document.getElementById('jobsContainer');
           container.innerHTML = '';
 
           if (jobs.length === 0) {
-            container.innerHTML = "<p>No jobs found for the entered role.</p>";
+            container.innerHTML = "<p style='text-align: center; color: #555;'>No jobs found for the entered role.</p>";
             return;
           }
 
@@ -136,6 +105,15 @@
         })
         .catch(err => {
           console.error('Error fetching jobs:', err);
+          const container = document.getElementById('jobsContainer');
+          if (err.message.includes('Unauthorized')) {
+            container.innerHTML = `<div style="text-align: center; padding: 20px; background: rgba(248, 215, 218, 0.9); color: #721c24; border-radius: 8px; border: 1px solid #f5c6cb; max-width: 600px; margin: 0 auto;">
+              <strong>Session Expired or Unauthorized:</strong><br><br>
+              Please <a href="../../login.html" style="color: #721c24; text-decoration: underline; font-weight: bold;">Log In</a> as a job seeker to search and apply for jobs.
+            </div>`;
+          } else {
+            container.innerHTML = `<p style="text-align: center; color: #e74c3c;">Failed to load jobs. Please try again later.</p>`;
+          }
         });
     }
 

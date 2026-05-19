@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Dashboard", url: "../seeker/dashboard.html" },
       { name: "Apply Job", url: "../seeker/apply_jobs.html" },
       { name: "Applied Jobs", url: "../seeker/applied_jobs.html" },
-      { name: "Service & Contact", url: "../seeker/service_contact.html" },
+      { name: "Contact", url: "../seeker/service_contact.html" },
       { name: "Logout", url: "../../php/logout.php" }
     ];
   } else if (role === "recruiter") {
@@ -20,10 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Post Job", url: "../recruiter/post_job.html" },
       { name: "Manage Jobs", url: "../recruiter/manage_jobs.html" },
       { name: "Applicants", url: "../recruiter/applicants.html" },
-      { name: "Service & Contact", url: "../recruiter/service_contact.html" },
+      { name: "Contact", url: "../recruiter/service_contact.html" },
       { name: "Logout", url: "../../php/logout.php" }
     ];
   }
+
+  document.body.classList.add("has-sidebar");
 
   navbar.innerHTML = `
     <nav class="sidebar" id="sidebar">
