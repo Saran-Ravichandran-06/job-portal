@@ -2,10 +2,6 @@
 
 /* Tablets (max 992px) */
 @media (max-width: 992px) {
-  .navbar ul {
-    gap: 1rem;
-  }
-
   .container,
   .login-container,
   .register-container {
@@ -15,32 +11,7 @@
 
 /* Mobiles (max 768px) */
 @media (max-width: 768px) {
-  .navbar {
-    flex-wrap: wrap;
-    padding: 0.8rem 1rem;
-  }
-
-  .menu-toggle {
-    display: block;
-    color: #fff;
-  }
-
-  .navbar ul {
-    flex-direction: column;
-    width: 100%;
-    background: #2b4c7e;
-    margin-top: 0.5rem;
-    display: none;
-  }
-
-  .navbar ul.active {
-    display: flex;
-  }
-
-  .navbar ul li {
-    padding: 0.7rem 0;
-    text-align: center;
-  }
+  /* Navbar styles removed as we now use a sidebar */
 }
 
 /* Small Mobiles (max 500px) */
