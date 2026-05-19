@@ -23,3 +23,5 @@ php/config.php
 /cache/
 /*.cache
 
+#Ignore uploads
+uploads/
